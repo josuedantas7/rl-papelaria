@@ -1,15 +1,13 @@
-'use client'
-import axios from 'axios'
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { useSession } from 'next-auth/react'
-const Home = () => {
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
-  const {data: session, status} = useSession()
+const Home = async () => {
 
-  useEffect(() => {
-    console.log(session?.user)
-  },[session])
+  const session = await getServerSession(authOptions)
+
+  console.log(session)
 
   return (
     <div className='2xl font-bold'>
