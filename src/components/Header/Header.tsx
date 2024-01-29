@@ -160,7 +160,7 @@ function Header() {
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {
                   status === 'authenticated' ? (
-                    <Avatar alt="Remy Sharp" src={session?.user?.image} />
+                    <Avatar alt="Remy Sharp" src={session?.user?.image || ''} />
                   ) : null
                 }
               </IconButton>
