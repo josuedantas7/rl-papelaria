@@ -34,9 +34,13 @@ function Header() {
 
   useEffect(() => {
     async function getCurrentUser(){
-      const response = await api.get(`/api/users/${session?.user?.email}`)
-
-      console.log(response)
+      if (!session?.user?.email) return
+      
+      const response = await api.get(`/api/users`, {
+        params: {
+          email : session?.user?.email
+        }
+      })
 
       if (response.data.role === 'admin'){
         setUserAdmin(true)

@@ -40,3 +40,31 @@ export async function POST(request: NextRequest){
 
     return NextResponse.json(user)
 }
+
+export async function GET(request: NextRequest){
+    const session = await getServerSession(authOptions)
+
+    if(!session){
+        return NextResponse.json({ error: "Não autorizado."}, { status: 401})
+    }
+
+    const { searchParams } = new URL(request.nextUrl)
+    
+    const email = searchParams.get("email")
+
+    if(email){
+        
+        try{
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: email
+                }
+            })
+            return NextResponse.json(user)
+        } catch{
+            return NextResponse.json({ error: "Usuário não encontrado."}, { status: 404})
+        }
+    } else {
+        NextResponse.json({ error: "E-mail não informado."}, { status: 400})
+    }
+}
