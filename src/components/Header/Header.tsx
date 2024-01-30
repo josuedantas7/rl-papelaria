@@ -1,5 +1,5 @@
 'use client'
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,16 +17,38 @@ import logo from '@/assets/logo-papelaria2-removebg-preview.png'
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { CgProfile } from "react-icons/cg";
 
 
 import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
+import prisma from '@/lib/db';
+import { getCurrentUser } from '@/lib/session'
+
+import axios from 'axios'
+import { api } from '@/lib/api';
 
 function Header() {
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [userAdmin, setUserAdmin] = useState<null | boolean>(null)
 
   const { data: session, status } = useSession()
+
+  // console.log(session)
+
+  useEffect(() => {
+    async function getCurrentUser(){
+      const response = await axios.get(`/api/users/${session?.user?.email}`)
+
+      console.log(response)
+
+      if (response.data.role === 'admin'){
+        setUserAdmin(true)
+      }
+    }
+    getCurrentUser()
+  },[session])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -63,7 +85,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            <Image className='rounded-full w-[90px] h-[70px]' alt='Logo loja' src={logo} />
+            <Image priority={true} className='rounded-full w-[90px] h-[70px]' alt='Logo loja' src={logo} />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -138,7 +160,7 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            <Image className='rounded-full w-[90px] h-[70px]' alt='Logo loja' src={logo} />
+            <Image priority={true} className='rounded-full w-[90px] h-[70px]' alt='Logo loja' src={logo} />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
@@ -153,14 +175,28 @@ function Header() {
               >
                 Sobre
               </Button>
+              {
+                status === 'unauthenticated' && (
+                  <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: 'white', display: 'block' }}
+                >
+                  <Link href={'/login'}>
+                    Login
+                  </Link>
+                </Button>
+                )
+              }
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {
-                  status === 'authenticated' ? (
+                  status === 'authenticated' && session.user ? (
                     <Avatar alt="Remy Sharp" src={session?.user?.image || ''} />
+                  ) : status === 'authenticated' ? (
+                    <CgProfile className='text-2xl'/>
                   ) : null
                 }
               </IconButton>
@@ -184,9 +220,17 @@ function Header() {
                 <MenuItem onClick={handleCloseUserMenu}>
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Dashboard</Typography>
-                </MenuItem>
+                {
+                  userAdmin && (
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">
+                        <Link href={'/cadastrar-admin'}>
+                          Cadastrar Admin
+                        </Link>
+                      </Typography>
+                    </MenuItem>
+                  )
+                }
                 <MenuItem onClick={() => {
                   signOut()
                   handleCloseUserMenu()
