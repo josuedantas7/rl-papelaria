@@ -22,10 +22,7 @@ import { CgProfile } from "react-icons/cg";
 
 import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
-import prisma from '@/lib/db';
-import { getCurrentUser } from '@/lib/session'
 
-import axios from 'axios'
 import { api } from '@/lib/api';
 
 function Header() {
@@ -35,11 +32,9 @@ function Header() {
 
   const { data: session, status } = useSession()
 
-  // console.log(session)
-
   useEffect(() => {
     async function getCurrentUser(){
-      const response = await axios.get(`/api/users/${session?.user?.email}`)
+      const response = await api.get(`/api/users/${session?.user?.email}`)
 
       console.log(response)
 
