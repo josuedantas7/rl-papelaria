@@ -21,6 +21,7 @@ export const authOptions : NextAuthOptions = {
             },
             async authorize(credentials, req) : Promise<any>{
 
+
                 console.log("Authorize method", credentials)
 
 
@@ -39,16 +40,35 @@ export const authOptions : NextAuthOptions = {
                 }
 
                 const matchPassword = await bcrypt.compare(credentials.password, user.hashedPassword)
-                if(!matchPassword)
-                    throw new Error("Senha incorreta")
+                if(!matchPassword) throw new Error("Senha incorreta")
 
                 return user
 
-
-
-            }
+            },
         })
     ],
+    callbacks: {
+        async session({ session }) {
+            const user = await prisma.user.findUnique({
+                where: {
+                    email: session?.user?.email ?? ''
+                }
+            })
+            if (user){
+                const newSession = {
+                    user: {
+                        ...session.user,
+                        id: user.id,
+                        role: user.role
+                    },
+                    expires: session.expires // Add the expires property
+                }
+                return newSession
+            } else {
+                return session
+            }
+        }
+    },
     session: {
         strategy: "jwt"
     },

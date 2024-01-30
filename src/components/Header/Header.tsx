@@ -23,7 +23,7 @@ import { CgProfile } from "react-icons/cg";
 import { useSession } from 'next-auth/react'
 import { signOut } from 'next-auth/react'
 
-import { api } from '@/lib/api';
+import { UserProps } from '@/intefaces/AllInterfaces';
 
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
@@ -33,21 +33,12 @@ function Header() {
   const { data: session, status } = useSession()
 
   useEffect(() => {
-    async function getCurrentUser(){
-      if (!session?.user?.email) return
-      
-      const response = await api.get(`/api/users`, {
-        params: {
-          email : session?.user?.email
-        }
-      })
-
-      if (response.data.role === 'admin'){
+    if(session){
+      if (status === 'authenticated' && session?.user?.role === 'admin') {
         setUserAdmin(true)
       }
     }
-    getCurrentUser()
-  },[session])
+  },[session,status])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
