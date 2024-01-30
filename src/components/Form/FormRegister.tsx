@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation'
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { storage } from '../../../services/firebaseConnection'
 
+import { LuUpload } from "react-icons/lu";
+
 import { v4 as uuidV4 } from 'uuid'
 import Link from 'next/link'
 
@@ -18,7 +20,7 @@ const FormCadastro = () => {
     const [password, setPassword] = useState<string>('')
     const [name, setName] = useState<string>('')
     const [image,setImage] = useState<string>('')
-    const [buttonDisabled, setButtonDisabled] = useState<boolean>(true)
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false)
 
     const router = useRouter()
 
@@ -29,7 +31,7 @@ const FormCadastro = () => {
         email,
         password,
         name,
-        image
+        image,
       }
 
       if (!email || !password || !name) return Notification('error', 'Preencha todos os campos!')
@@ -46,16 +48,15 @@ const FormCadastro = () => {
 
 
     async function handleFile(e : ChangeEvent<HTMLInputElement>){
-      setButtonDisabled(true)
       if (e.target.files && e.target.files[0]) {
         const image = e.target.files[0]
-        console.log(image)
   
         await handleUpload(image)
       }
     }
   
     async function handleUpload(image: File) {
+      setButtonDisabled(true)
 
       const uidImage = uuidV4()
   
@@ -76,8 +77,12 @@ const FormCadastro = () => {
       <InputWithLabel onChange={setName} type='text' label='Nome' placeholder='Escreva seu nome...' />
       <InputWithLabel onChange={setEmail} type='email' label='Email' placeholder='Escreva seu email...' />
       <InputWithLabel onChange={setPassword} type='password' label='Senha' placeholder='Escreva sua senha...' />
-      <div>
-        <input onChange={handleFile} type="file" accept="image/*"/>
+      <div className='cursor-pointer relative'>
+        <label className='absolute cursor-pointer flex items-center gap-2 mt-2'>
+          <LuUpload className='text-2xl cursor-pointer'/>
+          <span className='cursor-pointer'>Imagem de perfil</span>
+        </label>
+        <input className='opacity-0 cursor-pointer' onChange={handleFile} type="file" accept="image/*"/>
       </div>
       <Button disabled={buttonDisabled} onClick={(e) => HandleSubmit(e)} className='w-full disabled:cursor-not-allowed mt-3 bg-blue-500 hover:bg-green-400'>Enviar</Button>
       <div className='flex justify-end'>
