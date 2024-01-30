@@ -1,4 +1,6 @@
 import prisma from '@/lib/db'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 import bcrypt from "bcrypt"
 
@@ -6,7 +8,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export async function POST(request: NextRequest){
 
-    const { name, email, password, image } = await request.json()
+    const { name, email, password, image, role } = await request.json()
 
     if(!name || !email || !password){
         return NextResponse.json("Dados inválidos.", { status: 400})
@@ -30,15 +32,11 @@ export async function POST(request: NextRequest){
             email,
             name,
             hashedPassword,
-            image
+            image,
+            role: role || "user"
         }
     })
 
 
     return NextResponse.json(user)
-}
-
-export async function GET(){
-
-    return NextResponse.json({message: 'Testando rota GET'})
 }
