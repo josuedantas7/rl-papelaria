@@ -34,35 +34,3 @@ export async function POST(request: Request){
 
     return NextResponse.json(product)
 }
-
-
-export async function UPDATE(request: Request){
-
-    const session = await getServerSession(authOptions)
-
-    if (!session || !session.user) {
-        return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
-    }
-
-    const { id, name, price, description, category, image, color } = await request.json()
-    
-    if (!id) {
-        return NextResponse.json("ID do produto é obrigatório", { status: 400 })
-    }
-
-    const product = await prisma.product.update({
-        where: {
-            id
-        },
-        data: {
-            name,
-            price: parseFloat(price),
-            description,
-            category,
-            image,
-            color
-        }
-    })
-
-    return NextResponse.json(product)
-}
