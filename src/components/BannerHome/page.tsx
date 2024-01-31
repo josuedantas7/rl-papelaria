@@ -12,7 +12,7 @@ const BannerHome = () => {
   return (
       <div className='relative'>
         <Image className='object-contain mx-auto h-[400px] mt-2.5 max-[450px]:h-[250px] max-[350px]:h-[200px]' priority={true} src={logo} alt='logo loja'/>
-        <button onClick={() => redirectLink()} className='absolute bottom-12 max-[450px]:bottom-2 max-[350px]:-bottom-6 left-0 right-0 flex max-[460px]:flex-col gap-2 items-center justify-center'>
+        <button onClick={() => redirectLink()} className='absolute bottom-12 max-[450px]:bottom-2 max-[350px]:-bottom-6 left-0 right-0 flex max-[460px]:flex-col gap-2 max-[460px]:gap-0 items-center justify-center'>
             <h1 className='text-xl max-[550px]:text-md max-[460px]:text-sm'>Endereço:</h1>
             <p className='font-normal max-[550px]:text-sm'>Rua E, 24 - Nova Marabá, Marabá - PA, 68504-040</p>
         </button>
