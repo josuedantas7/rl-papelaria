@@ -3,6 +3,7 @@ import React from 'react'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import BannerHome from '@/components/BannerHome/page'
+import prisma from '@/lib/db'
 
 const Home = async () => {
 
