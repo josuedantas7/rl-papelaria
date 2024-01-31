@@ -28,17 +28,8 @@ import { UserProps } from '@/intefaces/AllInterfaces';
 function Header() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [userAdmin, setUserAdmin] = useState<null | boolean>(null)
 
   const { data: session, status } = useSession()
-
-  useEffect(() => {
-    if(session){
-      if (status === 'authenticated' && session?.user?.role === 'admin') {
-        setUserAdmin(true)
-      }
-    }
-  },[session,status])
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -120,6 +111,13 @@ function Header() {
               }
               <MenuItem onClick={handleCloseNavMenu}>
                 <Typography textAlign="center">
+                  <Link href={'/'}>
+                    Home
+                  </Link>  
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleCloseNavMenu}>
+                <Typography textAlign="center">
                   <Link href={'/produtos'}>
                     Produtos
                   </Link>  
@@ -157,13 +155,19 @@ function Header() {
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Produtos
+                <Link href={'/'}>Home</Link>
               </Button>
               <Button
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                Sobre
+                <Link href={'/produtos'}>Produtos</Link>
+              </Button>
+              <Button
+                onClick={handleCloseNavMenu}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+              >
+                <Link href={'/sobre'}>Sobre</Link>
               </Button>
               {
                 status === 'unauthenticated' && (
@@ -211,14 +215,23 @@ function Header() {
                   <Typography textAlign="center">Profile</Typography>
                 </MenuItem>
                 {
-                  userAdmin && (
-                    <MenuItem onClick={handleCloseUserMenu}>
+                  session?.user?.role === 'admin' && (
+                    <div>
+                      <MenuItem onClick={handleCloseUserMenu}>
                       <Typography textAlign="center">
                         <Link href={'/cadastrar-admin'}>
                           Cadastrar Admin
                         </Link>
                       </Typography>
                     </MenuItem>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">
+                        <Link href={'/cadastrar-produto'}>
+                          Cadastrar Produto
+                        </Link>
+                      </Typography>
+                    </MenuItem>
+                    </div>
                   )
                 }
                 <MenuItem onClick={() => {
