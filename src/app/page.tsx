@@ -11,7 +11,9 @@ const Home = async () => {
   return (
     <div className='2xl font-bold'>
       <BannerHome/>
-      Home page
+      <div className='mt-5'>
+        <h1>Home page</h1>
+      </div>
     </div>
   )
 }
