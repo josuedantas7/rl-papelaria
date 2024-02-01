@@ -17,6 +17,7 @@ import logo from '@/assets/logo-papelaria2-removebg-preview.png'
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { useRouter } from 'next/navigation';
 import { CgProfile } from "react-icons/cg";
 
 
@@ -30,6 +31,7 @@ function Header() {
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
 
   const { data: session, status } = useSession()
+  const router = useRouter()
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -211,9 +213,14 @@ function Header() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-                <MenuItem onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">Profile</Typography>
-                </MenuItem>
+                {status === 'authenticated' && (
+                  <MenuItem onClick={() => {
+                    handleCloseUserMenu(),
+                    router.push('/profile')
+                  }}>
+                    <Typography textAlign="center">Meu perfil</Typography>
+                  </MenuItem>
+                )}
                 {
                   session?.user?.role === 'admin' && (
                     <MenuItem onClick={handleCloseUserMenu}>

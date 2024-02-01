@@ -1,7 +1,7 @@
 'use client'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useState } from 'react'
 import { Input } from '../ui/input'
 import { Label } from '../ui/label'
 import {
@@ -19,14 +19,13 @@ import { v4 as uuidV4 } from 'uuid'
 import { api } from '@/lib/api'
 import { Button } from '../ui/button'
 
-const InfoUser = () => {
+const InfoDefaultUser = () => {
 
     const { data: session, status } = useSession()
     const [buttonEdit, setButtonEdit] = useState(false)
     const [name,setName] = useState('')
     const [email,setEmail] = useState('')
     const [image,setImage] = useState('')
-    const [role,setRole] = useState('')
     const [buttonDisabled, setButtonDisabled] = useState<boolean>(false)
 
 
@@ -35,7 +34,6 @@ const InfoUser = () => {
             name,
             email,
             image,
-            role
         }
 
 
@@ -48,13 +46,6 @@ const InfoUser = () => {
 
         
     }
-
-    useEffect(() => {
-        console.log(name)
-        console.log(email)
-        console.log(image)
-        console.log(role)
-    },[name,email,image,role])
 
 
     async function handleFile(e : ChangeEvent<HTMLInputElement>){
@@ -83,46 +74,30 @@ const InfoUser = () => {
       };
 
   return (
-    <div className='ml-auto mt-12 w-[80%] max-[820px]:w-[70%] max-[420px]:w-full'>
+    <div className='mt-4 w-full'>
         {status === 'loading' ? (
             <h1 className='text-center font-bold text-2xl'>Carregando informações...</h1>
         ): (
-            <div className='max-[420px]:px-2'>
-                <h1 className='text-3xl hidden min-[420px]:flex font-bold text-center mb-10'>Painel Admin</h1>
-                <div className='w-[80%] max-[420px]:w-full mx-auto bg-gray-300 relative rounded-xl pt-12 h-[400px] py-5 shadow-2xl border border-zinc-200'>
+            <div className='max-[420px]:px-2 min-[990px]:w-[50%] min-[990px]:mx-auto'>
+                <h1 className='text-3xl hidden min-[420px]:flex justify-center font-bold text-center mb-12'>Meu perfil</h1>
+                <div className={`w-[80%] max-[420px]:w-full mx-auto bg-gray-300 relative rounded-xl pt-12 h-[250px] py-5 shadow-2xl border border-zinc-200 ${buttonEdit && 'h-[350px]'}`}>
                     <Image className='mx-auto rounded-full absolute p-1 border-2 border-black -top-10 left-0 right-0 w-[80px] h-[80px]' width={80} height={80} alt='Foto de perfil' src={session?.user?.image || ''} />
                     {buttonEdit ? (
                         <div className='px-20 max-[620px]:px-8'>
                             <Label className='text-md'>Nome</Label>
-                            <Input placeholder={session?.user.name} className='w-[300px] max-[1180px]:w-full' type='text' onChange={(e) => setName(e.target.value)} />
+                            <Input placeholder={session?.user.name} className='max-[1180px]:w-full' type='text' onChange={(e) => setName(e.target.value)} />
                         </div>
                     ) : (
                         <h1 className='text-center w-full border-b border-black pb-2 text-lg font-bold'>Nome: <span className='text-md font-normal'>{session?.user.name}</span></h1>
                     )}
-                    <div className={`py-5 max-[1180px]:py-2 px-20 max-[620px]:px-8 flex justify-between ${buttonEdit ? 'max-[1180px]:flex-col' : 'max-[890px]:flex-col justify-center'} ${buttonEdit && 'justify-center gap-9 max-[1180px]:gap-2'}`}>
+                    <div className={`py-5 max-[1180px]:py-2 px-20 max-[620px]:px-8 flex justify-center`}>
                         {buttonEdit ? (
-                            <div>
+                            <div className='w-full'>
                                 <Label className='text-md'>Email</Label>
-                                <Input placeholder={session?.user.email} className='w-[300px] max-[1180px]:w-full' type='email' onChange={(e) => setEmail(e.target.value)} />
+                                <Input placeholder={session?.user.email} className='w-full' type='email' onChange={(e) => setEmail(e.target.value)} />
                             </div>
                         ) : (
-                            <h1 className='text-lg font-bold'>Email: <span className='text-md font-normal'>{session?.user.email}</span></h1>
-                        )}
-                        {buttonEdit && session?.user.role === 'admin' ? (
-                            <div>
-                                <Label className='text-md'>Permissão</Label>
-                                <Select onValueChange={setRole}>
-                                    <SelectTrigger className='w-[250px] max-[1180px]:w-full'>
-                                        <SelectValue placeholder="Permissão" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="user">Usuário</SelectItem>
-                                        <SelectItem value="admin">Administrador</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        ) : session?.user.role === 'admin' && (
-                            <h1 className='text-lg font-bold'>Papel: <span className='text-md font-normal'>{session?.user.role === 'admin' && 'Administrador'}</span></h1>
+                            <h1 className='text-lg flex justify-center font-bold'>Email: <span className='text-md font-normal'>{session?.user.email}</span></h1>
                         )}
                     </div>
                     {buttonEdit && (
@@ -139,4 +114,4 @@ const InfoUser = () => {
   )
 }
 
-export default InfoUser
+export default InfoDefaultUser

@@ -7,6 +7,9 @@ import prisma from "@/lib/db";
 export async function POST(request: Request){
 
 
+    const session = await getServerSession(authOptions)
+
+
 
     const { name, image, role, email, id } = await request.json()
 
@@ -16,8 +19,10 @@ export async function POST(request: Request){
         }
     })
 
-
     try {
+        if (role === 'admin' && session?.user?.role !== 'admin') {
+            return NextResponse.json({message: "Você não tem permissão para alterar o papel do usuário"})
+        }
         const user = await prisma.user.update({
             where: { id: id },
             data: {
