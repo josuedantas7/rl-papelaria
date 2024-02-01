@@ -3,8 +3,10 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/Header/Header";
 import AuthProvider from "../components/AuthProvider/AuthProvider";
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 import Notifier from "@/components/Notifier/Notifier";
+import { PrimeReactProvider } from 'primereact/api';
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,16 +19,19 @@ export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>)
+  {
   return (
     <html lang="en">
       <body className={inter.className}>
         <main>
-          <AuthProvider>
-            <Notifier/>
-            <Header/>
-            {children}
-          </AuthProvider>
+          <PrimeReactProvider>
+            <AuthProvider>
+              <Notifier/>
+              <Header/>
+              {children}
+            </AuthProvider>
+          </PrimeReactProvider>
         </main>
       </body>
     </html>

@@ -216,22 +216,14 @@ function Header() {
                 </MenuItem>
                 {
                   session?.user?.role === 'admin' && (
-                    <div>
-                      <MenuItem onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">
-                        <Link href={'/cadastrar-admin'}>
-                          Cadastrar Admin
-                        </Link>
-                      </Typography>
-                    </MenuItem>
                     <MenuItem onClick={handleCloseUserMenu}>
                       <Typography textAlign="center">
-                        <Link href={'/cadastrar-produto'}>
-                          Cadastrar Produto
+                        <Link href={'/painel-admin'}>
+                          Painel Admin
                         </Link>
                       </Typography>
                     </MenuItem>
-                    </div>
+                    
                   )
                 }
                 <MenuItem onClick={() => {

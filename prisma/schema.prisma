@@ -39,7 +39,7 @@ model User {
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
   accounts       Account[]
-  role           String?  @default("user")
+  role           String?   @default("user")
 }
 
 model Product {
@@ -48,11 +48,21 @@ model Product {
   description String?
   price       Float
   image       String
-  category    String
   color       String?
   status      Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String   @db.ObjectId
+}
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Product Product[]
 }
 
 model VerificationToken {
