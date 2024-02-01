@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import BannerHome from '@/components/BannerHome/page'
 import prisma from '@/lib/db'
+import PanelMenu from '@/components/PanelMenu/PanelMenu'
 
 const Home = async () => {
 
