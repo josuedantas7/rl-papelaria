@@ -14,7 +14,8 @@ const PainelAdmin = async () => {
 
   return (
     <div className='relative'>
-      <div className='absolute w-[20%] left-0 mt-20'>
+      <h1 className='text-2xl flex justify-center my-3 min-[420px]:hidden font-bold text-center'>Painel Admin</h1>
+      <div className='min-[420px]:absolute w-[20%] left-0 mt-20 max-[820px]:w-[35%] max-[420px]:w-full px-2 max-[420px]:mt-0'>
         <PanelMenu/>
       </div>
       <InfoUser/>
