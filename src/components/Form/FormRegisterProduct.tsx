@@ -18,6 +18,7 @@ import { v4 as uuidV4 } from 'uuid'
 
 import { useRouter } from 'next/navigation'
 import Notification from '../Notifier/Notification'
+import SelectForm from '../Select/SelectForm'
 
 import axios from 'axios'
 import { api } from '@/lib/api'
@@ -26,10 +27,10 @@ interface ProductProps{
     name: string;
     price: string;
     description: string;
-    category: string;
     color?: string;
     status?: boolean;
     image?: string;
+    category?: string;
 }
 
 type CreateProduct = z.infer<typeof createProductSchema>
@@ -38,7 +39,6 @@ const createProductSchema = z.object({
     name: z.string().min(1, 'Nome do produto é obrigatório'),
     price: z.string().min(1, 'Preço do produto é obrigatório'),
     description: z.string().min(1, 'Descrição do produto é obrigatório'),
-    category: z.string().min(1, 'Categoria do produto é obrigatório'),
     color: z.string(),
     status: z.boolean().default(true),
 })
@@ -48,6 +48,7 @@ const FormRegisterProduct = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateProduct>({	resolver: zodResolver(createProductSchema) })
 
     const [image,setImage] = React.useState<string>('')
+    const [category, setCategory] = React.useState<string>('')
     const [buttonDisabled, setButtonDisabled] = React.useState<boolean>(false)
 
     const { data: session, status } = useSession()
@@ -59,10 +60,10 @@ const FormRegisterProduct = () => {
                 name: data.name,
                 price: data.price,
                 description: data.description,
-                category: data.category,
                 color: data.color,
                 status: data.status,
                 image,
+                category,
             }
     
             const response = await api.post('/api/product', { ...newData })
@@ -82,6 +83,12 @@ const FormRegisterProduct = () => {
             router.push('/')
             Notification('error', 'Você não tem permissão para acessar essa página')
         }
+
+        async function getCategories(){
+            const response = await api.get('/api/category')
+            console.log(response)
+        }
+        getCategories()
     },[session,status,router])
 
 
@@ -111,10 +118,8 @@ const FormRegisterProduct = () => {
       };
 
 
-
-
   return (
-    <div className='w-[40%] flex mx-auto'>
+    <div className='w-[40%] flex mx-auto max-[900px]:w-[80%] max-[470px]:w-[90%]'>
         <form className='flex flex-col w-full gap-3' onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <Label htmlFor='name'>Nome do produto</Label>
@@ -133,10 +138,11 @@ const FormRegisterProduct = () => {
                 <Input type='text' id='description' placeholder='Descrição do produto' {...register('description')} />
                 {errors.description && <p>{errors.description.message}</p>}
             </div>
-
-            <Label htmlFor='category'>Categoria do produto</Label>
-            <Input type='text' id='category' placeholder='Categoria do produto' {...register('category')} />
-            {errors.category && <p>{errors.category.message}</p>}
+            
+            <div>
+                <Label htmlFor='category'>Categoria do produto</Label>
+                <SelectForm setCategoria={setCategory}/>
+            </div>
 
             <div>
                 <Label htmlFor='color'>Cor do produto</Label>

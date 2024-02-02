@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import { ObjectId } from 'mongodb'
 
 import prisma from "@/lib/db";
 
@@ -12,13 +13,23 @@ export async function POST(request: Request){
     const { name, price, description, category, image, color } = await request.json()
 
     if (!name || !price || !description || !category || !image) {
-        return NextResponse.json("Todos os dados são obrigatórios para cadastro dos produtos", { status: 400 })
+        return NextResponse.json("All fields its required", { status: 400 })
     }
 
     const session = await getServerSession(authOptions)
 
     if (!session || !session.user) {
-        return NextResponse.json({ error: "Não autorizado." }, { status: 401 })
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 })
+    }
+
+    const productExists = await prisma.product.findFirst({
+        where: {
+            name: name
+        }
+    })
+
+    if (productExists) {
+        return NextResponse.json({ error: "Product already exists." }, { status: 400 })
     }
 
     const product = await prisma.product.create({
@@ -26,7 +37,7 @@ export async function POST(request: Request){
             name,
             price: parseFloat(price),
             description,
-            category,
+            categoryId: category,
             image,
             color: color || ''
         }

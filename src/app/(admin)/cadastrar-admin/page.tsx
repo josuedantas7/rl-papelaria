@@ -23,7 +23,7 @@ const CadastrarAdmin = async () => {
   return (
     <div>
         <h1 className='my-6 text-center text-3xl font-bold'>Cadastrar Admin</h1>
-        <div className='w-[50%] mx-auto'>
+        <div className='w-[50%] mx-auto max-[900px]:w-[90%]'>
             <FormCadastroAdmin/>
         </div>
     </div>
