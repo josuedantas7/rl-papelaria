@@ -2,10 +2,10 @@ import { authOptions } from "@/lib/auth";
 import { getServerSession } from "next-auth";
 
 import prisma from "@/lib/db";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { redirect } from "next/navigation";
 
-export async function POST(request: Request){
+export async function POST(request: NextRequest){
 
     const session = await getServerSession(authOptions);
 
@@ -23,10 +23,21 @@ export async function POST(request: Request){
     }
 
 
+    const categoryExists = await prisma.category.findFirst({
+        where: {
+            name
+        }
+    })
+
+    if (categoryExists) {
+        return NextResponse.json("Category already exists", { status: 400 })
+    }
+
+
     try{
         const category = await prisma.category.create({
             data: {
-                name
+                name: name,
             }
         })
     
