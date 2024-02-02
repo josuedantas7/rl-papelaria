@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { ObjectId } from 'mongodb'
 
 import prisma from "@/lib/db";
 
