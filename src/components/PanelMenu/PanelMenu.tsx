@@ -24,21 +24,21 @@ export default function BasicDemo() {
             label: 'Gerenciar Loja',
             items: [
                 {
-                    label: 'Gerenciar Produtos',
+                    label: 'Cadastrar Produtos',
                     icon: 'pi pi-fw pi-file',
                     command: () => {
                         router.push('/cadastrar-produto')
                     }
                 },
                 {
-                    label: 'Gerenciar Categorias',
+                    label: 'Cadastrar Categorias',
                     icon: 'pi pi-fw pi-tags',
                     command: () => {
                         router.push('/cadastrar-categoria')
                     }
                 },
                 {
-                    label: 'Gerenciar Usuários',
+                    label: 'Cadastrar Admin',
                     icon: 'pi pi-fw pi-user',
                     command: () => {
                         router.push('/cadastrar-admin')

@@ -20,30 +20,32 @@ import { useRouter } from 'next/navigation'
 import Notification from '../Notifier/Notification'
 import SelectForm from '../Select/SelectForm'
 
-import axios from 'axios'
 import { api } from '@/lib/api'
 
 interface ProductProps{
-    name: string;
-    price: string;
-    description: string;
-    color?: string;
+    id?: string;
+    name?: string;
+    price?: number;
+    description?: string | null;
+    color?: string | null;
     status?: boolean;
     image?: string;
     category?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 type CreateProduct = z.infer<typeof createProductSchema>
 
 const createProductSchema = z.object({
-    name: z.string().min(1, 'Nome do produto é obrigatório'),
-    price: z.string().min(1, 'Preço do produto é obrigatório'),
-    description: z.string().min(1, 'Descrição do produto é obrigatório'),
+    name: z.string(),
+    price: z.number(),
+    description: z.string(),
     color: z.string(),
     status: z.boolean().default(true),
 })
 
-const FormRegisterProduct = () => {
+const FormEditProduct = ({product} : { product: ProductProps | null }) => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<CreateProduct>({	resolver: zodResolver(createProductSchema) })
 
@@ -57,16 +59,17 @@ const FormRegisterProduct = () => {
     const onSubmit =  async (data: ProductProps) => {
         try{
             const newData : ProductProps = {
-                name: data.name,
-                price: data.price,
-                description: data.description,
-                color: data.color,
-                status: data.status,
-                image,
-                category,
+                id: product?.id,
+                name: data.name || product?.name,
+                price: data.price || product?.price,
+                description: data.description || product?.description,
+                color: data.color || product?.color,
+                status: data.status || product?.status,
+                image: image || product?.image,
+                category: category || product?.category,
             }
     
-            const response = await api.post('/api/product', { ...newData })
+            const response = await api.post('/api/editproduct', { ...newData })
             Notification('success', 'Produto cadastrado com sucesso')
             console.log(response.data)
             router.replace('/produtos')
@@ -118,24 +121,30 @@ const FormRegisterProduct = () => {
       };
 
 
+    function formatNumber(price: number | undefined){
+        const formattedPrice = price || 0;
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(formattedPrice);
+    }
+
+
   return (
     <div className='w-[40%] flex mx-auto max-[900px]:w-[80%] max-[470px]:w-[90%]'>
         <form className='flex flex-col w-full gap-3' onSubmit={handleSubmit(onSubmit)}>
             <div>
                 <Label htmlFor='name'>Nome do produto</Label>
-                <Input type='text' id='name' placeholder='Nome do produto' {...register('name')} />
+                <Input type='text' id='name' placeholder={product?.name || ''} {...register('name')} />
                 {errors.name && <p>{errors.name.message}</p>}
             </div>
 
             <div>
                 <Label htmlFor='price'>Preço do produto</Label>
-                <Input type='text' id='price' placeholder='Preço do produto' {...register('price')} />
+                <Input type='text' id='price' placeholder={formatNumber(product?.price) || ''} {...register('price')} />
                 {errors.price && <p>{errors.price.message}</p>}
             </div>
 
             <div>
                 <Label htmlFor='description'>Descrição do produto</Label>
-                <Input type='text' id='description' placeholder='Descrição do produto' {...register('description')} />
+                <Input type='text' id='description' placeholder={product?.description || ''} {...register('description')} />
                 {errors.description && <p>{errors.description.message}</p>}
             </div>
             
@@ -146,7 +155,7 @@ const FormRegisterProduct = () => {
 
             <div>
                 <Label htmlFor='color'>Cor do produto</Label>
-                <Input type='text' id='color' placeholder='Cor do produto' {...register('color')} />
+                <Input type='text' id='color' placeholder={product?.color || ''} {...register('color')} />
             </div>
 
             <div className='cursor-pointer relative'>
@@ -163,4 +172,4 @@ const FormRegisterProduct = () => {
   )
 }
 
-export default FormRegisterProduct
+export default FormEditProduct

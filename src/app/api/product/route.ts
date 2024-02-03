@@ -9,17 +9,19 @@ export async function GET(){
 }
 
 export async function POST(request: Request){
-    const { name, price, description, category, image, color } = await request.json()
-
-    if (!name || !price || !description || !category || !image) {
-        return NextResponse.json("All fields its required", { status: 400 })
-    }
 
     const session = await getServerSession(authOptions)
 
     if (!session || !session.user) {
         return NextResponse.json({ error: "Not authorized." }, { status: 401 })
     }
+    
+    const { name, price, description, category, image, color } = await request.json()
+
+    if (!name || !price || !description || !category || !image) {
+        return NextResponse.json("All fields its required", { status: 400 })
+    }
+
 
     const productExists = await prisma.product.findFirst({
         where: {

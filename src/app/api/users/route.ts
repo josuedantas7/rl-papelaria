@@ -11,7 +11,7 @@ export async function POST(request: NextRequest){
     const { name, email, password, image, role } = await request.json()
 
     if(!name || !email || !password){
-        return NextResponse.json("Dados inválidos.", { status: 400})
+        return NextResponse.json("Invalid date", { status: 400})
     }
 
     const isUserExists = await prisma.user.findUnique({
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest){
     })
 
     if(isUserExists){
-        return NextResponse.json({ error: "E-mail já existente."}, { status: 400})
+        return NextResponse.json({ error: "Email already exists."}, { status: 400})
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -38,5 +38,15 @@ export async function POST(request: NextRequest){
     })
 
 
-    return NextResponse.json(user)
+    return NextResponse.json(user, { status: 201})
+}
+
+export async function GET(){
+    const session = await getServerSession(authOptions)
+
+    if(session?.user?.role !== "admin"){
+        return NextResponse.json({ error: "Não autorizado."}, { status: 401})
+    }
+    const users = await prisma.user.findMany()
+    return NextResponse.json(users, { status: 200})
 }
