@@ -1,5 +1,5 @@
 'use client'
-import React, { ChangeEvent, useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,9 +15,14 @@ import { useRouter } from 'next/navigation'
 import Notification from '../Notifier/Notification'
 
 import { api } from '@/lib/api'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { storage } from '../../../services/firebaseConnection'
+
+import { v4 as uuidV4 } from 'uuid'
 
 interface CategoryProps{
     name: string;
+    image?: string;
 }
 
 type CreateCategory = z.infer<typeof createCategorySchema>
@@ -31,13 +36,18 @@ const FormRegisterCategory = () => {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateCategory>({	resolver: zodResolver(createCategorySchema) })
 
     const { data: session, status } = useSession()
+    const [image,setImage] = useState<string>('')
+    const [buttonDisabled, setButtonDisabled] = useState<boolean>(false)
     const router = useRouter()
 
     const onSubmit =  async (data: CategoryProps) => {
         try{
-            console.log(data)
+            const newData : CategoryProps = {
+                name: data.name,
+                image: image
+            }
     
-            const response = await api.post('/api/category', data)
+            const response = await api.post('/api/category', newData)
             Notification('success', 'Categoria cadastrada com sucesso')
             console.log(response.data)
             router.refresh()
@@ -47,6 +57,31 @@ const FormRegisterCategory = () => {
         }
 
     }
+
+    async function handleFile(e : ChangeEvent<HTMLInputElement>){
+        if (e.target.files && e.target.files[0]) {
+          const image = e.target.files[0]
+    
+          await handleUpload(image)
+        }
+      }
+    
+      async function handleUpload(image: File) {
+        setButtonDisabled(true)
+  
+        const uidImage = uuidV4()
+    
+        const uploadRef = ref(storage, `category/${uidImage}`)
+    
+        uploadBytes(uploadRef, image)
+        .then((snapShop) => {
+          getDownloadURL(snapShop.ref)
+          .then(url => {
+            setImage(url)
+            setButtonDisabled(false)
+          })
+        })
+      };
 
 
     useEffect(() => {
@@ -64,7 +99,11 @@ const FormRegisterCategory = () => {
                 <Input type='text' id='name' placeholder='Nome da categoria...' {...register('name')} />
                 {errors.name && <p>{errors.name.message}</p>}
             </div>
-            <Button className='w-full mt-3 bg-blue-500 hover:bg-green-400'>Cadastrar Categoria</Button>
+            <div>
+                <Label htmlFor='image'>Imagem da categoria</Label>
+                <Input type='file' id='image' onChange={handleFile} />
+            </div>
+            <Button disabled={buttonDisabled} className='w-full mt-3 disabled:cursor-not-allowed bg-blue-500 hover:bg-green-400'>Cadastrar Categoria</Button>
         </form>
     </div>
   )
