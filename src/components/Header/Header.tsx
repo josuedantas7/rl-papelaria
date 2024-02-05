@@ -61,14 +61,18 @@ function Header() {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar className='relative' disableGutters>
-          <div onClick={() => router.push('/carrinho')} className='absolute cursor-pointer mx-auto flex justify-center items-center left-0 right-0'>
-            {qtdTotal > 0 && (
-              <p className='absolute cursor-pointer bg-white rounded-full text-black w-[25px] h-[25px] mx-auto flex justify-center right-0 left-0 -translate-y-3 translate-x-4'>{qtdTotal}</p>
-            )}
-            <Link href={'/carrinho'}>
-              <FiShoppingCart className='cursor-pointer' size={25}/>
-            </Link>
-          </div>
+          {
+            status === 'authenticated' && (
+              <div onClick={() => router.push('/carrinho')} className='absolute cursor-pointer mx-auto flex justify-center items-center left-0 right-0'>
+                {qtdTotal > 0 && (
+                  <p className='absolute cursor-pointer bg-white rounded-full text-black w-[25px] h-[25px] mx-auto flex justify-center right-0 left-0 -translate-y-3 translate-x-4'>{qtdTotal}</p>
+                )}
+                <Link href={'/carrinho'}>
+                  <FiShoppingCart className='cursor-pointer' size={25}/>
+                </Link>
+              </div>
+            )
+          }
           <Typography
             variant="h6"
             noWrap
