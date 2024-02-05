@@ -8,6 +8,8 @@ import "primereact/resources/themes/lara-light-cyan/theme.css";
 import Notifier from "@/components/Notifier/Notifier";
 import { PrimeReactProvider } from 'primereact/api';
 
+import { CartProvider } from '@/context/CartContext'
+
 export const metadata: Metadata = {
   title: "RL Papelaria",
   description: "Melhor loja para comprar materiais escolares e de escritório",
@@ -24,15 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main>
-          <PrimeReactProvider>
-            <AuthProvider>
-              <Notifier/>
-              <Header/>
-              {children}
-            </AuthProvider>
-          </PrimeReactProvider>
-        </main>
+        <CartProvider>
+          <main>
+            <PrimeReactProvider>
+              <AuthProvider>
+                <Notifier/>
+                <Header/>
+                {children}
+              </AuthProvider>
+            </PrimeReactProvider>
+          </main>
+        </CartProvider>
       </body>
     </html>
   );
