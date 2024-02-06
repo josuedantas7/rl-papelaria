@@ -60,26 +60,23 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
 
     const onSubmit =  async (data: ProductProps) => {
         try{
-            console.log(data.star)
-            console.log(data.status)
-            console.log(data.price)
-            // const newData : ProductProps = {
-            //     id: product?.id,
-            //     name: data.name || product?.name,
-            //     price: data.price || product?.price,
-            //     description: data.description || product?.description,
-            //     color: data.color || product?.color,
-            //     status: data.status || product?.status,
-            //     image: image || product?.image,
-            //     category: category || product?.category,
-            //     star: data.star || product?.star
-            // }
+            const newData : ProductProps = {
+                id: product?.id,
+                name: data.name || product?.name,
+                price: data.price || product?.price,
+                description: data.description || product?.description,
+                color: data.color || product?.color,
+                image: image || product?.image,
+                status: data.status || product?.status,
+                category: category || product?.category,
+                star: data.star || product?.star,
+            }
     
-            // const response = await api.post('/api/editproduct', { ...newData })
-            // Notification('success', 'Produto cadastrado com sucesso')
-            // console.log(response.data)
-            // router.replace('/produtos')
-            // router.refresh()
+            const response = await api.post('/api/editproduct', { ...newData })
+            Notification('success', 'Produto cadastrado com sucesso')
+            console.log(response.data)
+            router.replace('/produtos')
+            router.refresh()
         } catch{
             Notification('error', 'Erro ao cadastrar produto')
         }
