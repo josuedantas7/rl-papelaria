@@ -28,21 +28,23 @@ interface ProductProps{
     price?: number;
     description?: string | null;
     color?: string | null;
-    status?: boolean;
     image?: string;
     category?: string;
     createdAt?: Date;
     updatedAt?: Date;
+    status?: boolean;
+    star?: boolean;
 }
 
 type CreateProduct = z.infer<typeof createProductSchema>
 
 const createProductSchema = z.object({
     name: z.string(),
-    price: z.number(),
+    price: z.string(),
     description: z.string(),
     color: z.string(),
     status: z.boolean().default(true),
+    star: z.boolean().default(false),
 })
 
 const FormEditProduct = ({product} : { product: ProductProps | null }) => {
@@ -58,22 +60,26 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
 
     const onSubmit =  async (data: ProductProps) => {
         try{
-            const newData : ProductProps = {
-                id: product?.id,
-                name: data.name || product?.name,
-                price: data.price || product?.price,
-                description: data.description || product?.description,
-                color: data.color || product?.color,
-                status: data.status || product?.status,
-                image: image || product?.image,
-                category: category || product?.category,
-            }
+            console.log(data.star)
+            console.log(data.status)
+            console.log(data.price)
+            // const newData : ProductProps = {
+            //     id: product?.id,
+            //     name: data.name || product?.name,
+            //     price: data.price || product?.price,
+            //     description: data.description || product?.description,
+            //     color: data.color || product?.color,
+            //     status: data.status || product?.status,
+            //     image: image || product?.image,
+            //     category: category || product?.category,
+            //     star: data.star || product?.star
+            // }
     
-            const response = await api.post('/api/editproduct', { ...newData })
-            Notification('success', 'Produto cadastrado com sucesso')
-            console.log(response.data)
-            router.replace('/produtos')
-            router.refresh()
+            // const response = await api.post('/api/editproduct', { ...newData })
+            // Notification('success', 'Produto cadastrado com sucesso')
+            // console.log(response.data)
+            // router.replace('/produtos')
+            // router.refresh()
         } catch{
             Notification('error', 'Erro ao cadastrar produto')
         }
@@ -126,7 +132,6 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
         return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(formattedPrice);
     }
 
-
   return (
     <div className='w-[40%] flex mx-auto max-[900px]:w-[80%] max-[470px]:w-[90%]'>
         <form className='flex flex-col w-full gap-3' onSubmit={handleSubmit(onSubmit)}>
@@ -138,7 +143,7 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
 
             <div>
                 <Label htmlFor='price'>Preço do produto</Label>
-                <Input type='text' id='price' placeholder={formatNumber(product?.price) || ''} {...register('price')} />
+                <Input type='number' id='price' placeholder={formatNumber(product?.price) || ''} {...register('price')} />
                 {errors.price && <p>{errors.price.message}</p>}
             </div>
 
@@ -156,6 +161,16 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
             <div>
                 <Label htmlFor='color'>Cor do produto</Label>
                 <Input type='text' id='color' placeholder={product?.color || ''} {...register('color')} />
+            </div>
+
+            <div>
+                <Label htmlFor='star'>Produto em destaque</Label>
+                <Input type='checkbox' id='star' defaultChecked={product?.star} {...register('star')} />
+            </div>
+
+            <div>
+                <Label htmlFor='status'>Status do produto</Label>
+                <Input type='checkbox' id='status' defaultChecked={product?.status} {...register('status')} />
             </div>
 
             <div className='cursor-pointer relative'>

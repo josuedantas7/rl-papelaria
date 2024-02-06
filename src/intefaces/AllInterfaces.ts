@@ -19,6 +19,7 @@ export interface ProductProps{
     createdAt: Date;
     updatedAt: Date;
     categoryId: string;
+    star?: boolean | null;
 }
 
 export interface CategoryProps{
