@@ -9,21 +9,22 @@ export interface UserProps{
 export interface ProductProps{
     id: string;
     name: string;
-    description: string;
+    description: string | null;
     price: number;
     image: string;
-    color?: string;
-    category: CategoryProps;
-    qtd: number;
+    color?: string | null;
+    category?: CategoryProps;
+    qtd: number | null;
     status: boolean;
     createdAt: Date;
     updatedAt: Date;
     categoryId: string;
 }
 
-interface CategoryProps{
+export interface CategoryProps{
     id: string;
     name: string;
+    image: string;
     createdAt?: Date;
     updatedAt?: Date;
 }
