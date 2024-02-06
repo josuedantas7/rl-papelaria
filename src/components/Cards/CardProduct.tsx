@@ -1,9 +1,17 @@
+'use client'
 import { ProductProps } from '@/intefaces/AllInterfaces'
 import Image from 'next/image'
-import React from 'react'
+import React, { useContext } from 'react'
 import Link from 'next/link'
+import { BiCartDownload } from "react-icons/bi";
+import { CartContext } from '@/context/CartContext'
+import { useSession } from 'next-auth/react'
 
 const CardProduct = ({product} : { product: ProductProps }) => {
+
+    const { status } = useSession()
+
+    const { addCart } = useContext(CartContext)
 
     function formatNumber(value: number) {
         return new Intl.NumberFormat("pt-BR", {
@@ -14,6 +22,13 @@ const CardProduct = ({product} : { product: ProductProps }) => {
 
   return (
     <div className='w-[300px] h-[480px] relative rounded-xl border border-gray-300 shadow-2xl'>
+        {
+            status === 'authenticated' && (
+                <button onClick={() => addCart(product)} className='absolute top-0 right-2 p-2 bg-gray-300 border-black border-2 text-black rounded-full'>
+                    <BiCartDownload size={30} />
+                </button>
+            )
+        }
         <div>
             <Image className='rounded-t-xl mt-3' src={product.image} alt={product.name} width={300} height={300} />
         </div>

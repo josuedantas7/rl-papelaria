@@ -29,6 +29,10 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
     }
 
     function removeQtdCart(product: ProductProps) {
+        if (product.qtd === 1) {
+            setCart(cart.filter((item) => item.id !== product.id))
+            return
+        }
         const newCart = cart.map((item) => {
             if(item.id === product.id && item.qtd) {
                 item.qtd -= 1

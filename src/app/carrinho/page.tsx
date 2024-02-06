@@ -15,22 +15,22 @@ const Carrinho = () => {
     }
 
   return (
-    <div>
+    <div className='pt-4'>
         {cart.length > 0 ? (
             <div>
                 {cart && cart.map((product) => (
                     (product.qtd ?? 0) > 0 && (
                         <div className='flex border-b-[1px] items-center justify-between text-gray-600 text-sm' key={product.id}>
                             <div className='w-1/4'>
-                                <Image className='w-[100px] h-[100px]' src={product.image} alt={product.name} />
+                                <Image width={100} height={100} className='w-[100px] h-[100px]' src={product.image} alt={product.name} />
                             </div>
                             <p className='w-1/4 text-center font-bold'>Preço: {formatNumber(product.price)}</p>
                             <p className='w-1/4 flex justify-center gap-1'>
-                                <span className='bg-gray-700 cursor-pointer text-white px-1.5 rounded-sm' onClick={() => addQtdCart && addQtdCart(product)}>
+                                <span className='bg-gray-700 cursor-pointer text-white px-1.5 rounded-sm' onClick={() => removeQtdCart && removeQtdCart(product)}>
                                     -
                                 </span> 
                                 {product.qtd}
-                                <span className='bg-gray-700 cursor-pointer text-white px-1.5 rounded-sm' onClick={() => removeQtdCart && removeQtdCart(product)}>
+                                <span className='bg-gray-700 cursor-pointer text-white px-1.5 rounded-sm' onClick={() => addQtdCart && addQtdCart(product)}>
                                     +
                                 </span>
                             </p>
