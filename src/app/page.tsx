@@ -6,6 +6,7 @@ import BannerHome from '@/components/BannerHome/page'
 import prisma from '@/lib/db'
 import PanelMenu from '@/components/PanelMenu/PanelMenu'
 import CardCategory from '@/components/Cards/CardCategory'
+import CardProduct from '@/components/Cards/CardProduct'
 
 const Home = async () => {
 
@@ -31,14 +32,18 @@ const Home = async () => {
               ))}
           </div>
         </div>
-        <div className='mt-4'>
-          <h1 className='text-center text-2xl text-gray-700 font-bold mt-12'>Productos destacados</h1>
-          <div className='flex flex-wrap mt-4 gap-5'>
-            {products.map((product) => (
-                <CardCategory key={product.id} category={product} />
-              ))}
-          </div>
-        </div>
+        {
+          products.length > 0 && (
+            <div className='mt-4'>
+              <h1 className='text-center text-2xl text-gray-700 font-bold mt-12'>Productos destacados</h1>
+              <div className='flex flex-wrap mt-4 gap-5'>
+                {products.map((product) => (
+                    <CardProduct key={product.id} product={product} />
+                ))}
+              </div>
+            </div>
+          )
+        }
       </div>
     </div>
   )
