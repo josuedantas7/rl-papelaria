@@ -51,7 +51,7 @@ const FormRegisterCategory = () => {
             Notification('success', 'Categoria cadastrada com sucesso')
             console.log(response.data)
             router.refresh()
-            router.replace('/cadastrar-categoria')
+            router.replace('/cadastrar-produto')
         } catch{
             Notification('error', 'Erro ao cadastrar categoria')
         }

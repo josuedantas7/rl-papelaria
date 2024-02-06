@@ -55,11 +55,13 @@ model Product {
   updatedAt   DateTime @updatedAt
   category    Category @relation(fields: [categoryId], references: [id])
   categoryId  String   @db.ObjectId
+  star        Boolean  @default(false)
 }
 
 model Category {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
+  image     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

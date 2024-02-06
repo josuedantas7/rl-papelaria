@@ -15,7 +15,7 @@ export async function POST(request: NextRequest){
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const { name } = await request.json();
+    const { name, image } = await request.json();
 
 
     if (!name) {
@@ -38,6 +38,7 @@ export async function POST(request: NextRequest){
         const category = await prisma.category.create({
             data: {
                 name: name,
+                image: image
             }
         })
     
