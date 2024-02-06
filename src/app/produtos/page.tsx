@@ -6,20 +6,14 @@ import CardCategory from '@/components/Cards/CardCategory'
 
 const Products = async () => {
 
-  const products = await prisma.product.findMany({
-    include: {
-      category: true
-    }
-  })
-
   const  categories = await prisma.category.findMany()
 
   console.log(categories)
-  // console.log(products)
 
   return (
     <div>
-      <div className='flex flex-wrap gap-20'>
+      <h1 className='text-center text-2xl font-bold my-8'>Escolha uma categoria</h1>
+      <div className='flex flex-wrap gap-20 px-20'>
         {categories.map((category) => (
           <CardCategory key={category.id} category={category} />
         ))}

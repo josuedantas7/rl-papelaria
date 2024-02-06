@@ -20,7 +20,7 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
 
     function addQtdCart(product: ProductProps) {
         const newCart = cart.map((item) => {
-            if(item.id === product.id) {
+            if(item.id === product.id && item.qtd) {
                 item.qtd += 1
             }
             return item
@@ -30,7 +30,7 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
 
     function removeQtdCart(product: ProductProps) {
         const newCart = cart.map((item) => {
-            if(item.id === product.id) {
+            if(item.id === product.id && item.qtd) {
                 item.qtd -= 1
             }
             return item
@@ -42,6 +42,7 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
         function totalCart() {
             let total = 0
             cart.map((item) => {
+                if (!item.qtd) item.qtd = 1
                 total += item.qtd
             })
             setQtdTotal(total)
@@ -49,6 +50,7 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
         function totalValue(){
             let total = 0
             cart.map((item) => {
+                if (!item.qtd) item.qtd = 1
                 total += item.qtd * item.price
             })
             setTotalValue(total)
