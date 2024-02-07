@@ -15,12 +15,12 @@ const EditProduct = async ({params} : { params: { params: string } }) => {
 
     console.log(product)
 
-  return (
-    <div>
-    <h1 className='my-6 text-center text-3xl font-bold'>Editar Produto</h1>
-        <FormEditProduct product={product} />
-    </div>
-  )
+    return (
+      <div>
+        <h1 className='my-6 text-center text-3xl font-bold'>Editar Produto</h1>
+        <FormEditProduct product={{ ...product, price: product?.price.toString() }} />
+      </div>
+    )
 }
 
 export default EditProduct
