@@ -11,7 +11,7 @@ export async function POST(request: NextRequest){
         return NextResponse.json({ error: "Not authorized." }, { status: 401 })
     }
 
-    const { name, price, description, category, image, color, id } = await request.json()
+    const { name, price, description, category, image, color, id, star, status } = await request.json()
 
     
     try{
@@ -22,6 +22,8 @@ export async function POST(request: NextRequest){
             data: {
                 name,
                 price: parseFloat(price),
+                status,
+                star,
                 description,
                 categoryId: category,
                 image,

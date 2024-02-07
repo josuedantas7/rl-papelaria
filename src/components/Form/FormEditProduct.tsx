@@ -25,7 +25,7 @@ import { api } from '@/lib/api'
 interface ProductProps{
     id?: string;
     name?: string;
-    price?: number;
+    price?: string;
     description?: string | null;
     color?: string | null;
     image?: string;
@@ -124,9 +124,9 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
       };
 
 
-    function formatNumber(price: number | undefined){
+    function formatNumber(price: string | undefined | number){
         const formattedPrice = price || 0;
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(formattedPrice);
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(formattedPrice))
     }
 
   return (
@@ -140,7 +140,7 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
 
             <div>
                 <Label htmlFor='price'>Preço do produto</Label>
-                <Input type='number' id='price' placeholder={formatNumber(product?.price) || ''} {...register('price')} />
+                <Input type='string' id='price' placeholder={formatNumber(product?.price) || ''} {...register('price')} />
                 {errors.price && <p>{errors.price.message}</p>}
             </div>
 
@@ -178,7 +178,7 @@ const FormEditProduct = ({product} : { product: ProductProps | null }) => {
                 <input className='opacity-0 cursor-pointer' onChange={handleFile} type="file" accept="image/*"/>
             </div>
 
-            <Button className='w-full disabled:cursor-not-allowed mt-3 bg-blue-500 hover:bg-green-400' disabled={buttonDisabled}>Cadastrar produto</Button>
+            <Button className='w-full disabled:cursor-not-allowed mt-3 bg-blue-500 hover:bg-green-400' disabled={buttonDisabled}>Editar produto</Button>
         </form>
     </div>
   )

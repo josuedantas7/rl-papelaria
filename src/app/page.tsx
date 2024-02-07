@@ -21,7 +21,7 @@ const Home = async () => {
   })
 
   return (
-    <div className='2xl font-bold'>
+    <div className='2xl font-bold mb-20'>
       <BannerHome/>
       <div className='flex flex-col items-center px-20'>
         <div>
