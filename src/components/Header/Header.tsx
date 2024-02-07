@@ -170,7 +170,6 @@ function Header() {
               textDecoration: 'none',
             }}
           >
-            <Image priority={true} className='rounded-full w-[90px] h-[70px]' alt='Logo loja' src={logo} />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               <Button
