@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import FormRegisterProduct from '@/components/Form/FormRegisterProduct'
 import prisma from '@/lib/db'
 import Link from 'next/link'
+import { ModalDeleteProduct } from '@/components/Modal/ModalDeleteProduct'
 
 const RegisterProduct = async () => {
 
@@ -42,13 +43,12 @@ const RegisterProduct = async () => {
                   <Link href={`/edit-product/${product.id}`} className='bg-green-300 px-3 py-1.5 rounded-md text-white font-bold'>Editar</Link>
                 </div>
                 <div className='text-end w-1/6 max-[550px]:w-1/4'>
-                  <button className='bg-red-300 px-3 rounded-md text-white py-1.5 font-bold'>Excluir</button>
+                    <ModalDeleteProduct id={product.id}/>
                 </div>
               </div>
             ))}
           </div>
         </div>
-
     </div>
   )
 }
