@@ -54,3 +54,39 @@ export async function GET(){
 
     return NextResponse.json(categories);
 }
+
+
+export async function DELETE(request: Request){
+    const session = await getServerSession(authOptions)
+
+    if (!session || !session.user) {
+        return NextResponse.json({ error: "Not authorized." }, { status: 401 })
+    }
+
+    const { searchParams } = new URL(request.url)
+
+    const categoryId = searchParams.get('id')
+
+    const products = await prisma.product.findMany({})
+
+    products.map(async (product) => {
+        if (product.categoryId === categoryId) {
+            return NextResponse.json({ error: "Category has products" }, { status: 400 })
+        }
+    })
+
+    if (!categoryId) {
+        return NextResponse.json({ error: "Category id is required." }, { status: 400 })
+    }
+
+    try{
+        await prisma.category.delete({
+            where: {
+                id: categoryId
+            }
+        })
+        return NextResponse.json({ message: "Category deleted" }, { status: 200 })
+    }catch{
+        return NextResponse.json({ error: "Error to delete category" }, { status: 500 })
+    }
+}
