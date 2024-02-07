@@ -7,6 +7,7 @@ const ProductId = async ({params} : {params: {params: string}}) => {
 
     const productId = await prisma.product.findUnique({
         where: {
+            status: true,
             id: id
         }
     })

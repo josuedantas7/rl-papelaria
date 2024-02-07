@@ -14,10 +14,11 @@ export default function BasicDemo() {
             items: [
                 {
                     label: 'Meu perfil',
+                    icon: 'pi pi-fw pi-user',
+                    command: () => {
+                        router.push('/profile')
+                    }
                 },
-                {
-                    label: 'Gerenciar perfils',
-                }
             ]
         },
         {

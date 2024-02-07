@@ -8,6 +8,7 @@ const CategoryId = async ({params} : { params : { params: string } }) => {
 
     const products = await prisma.product.findMany({
       where: {
+        status: true,
         categoryId: id
       },
     })
