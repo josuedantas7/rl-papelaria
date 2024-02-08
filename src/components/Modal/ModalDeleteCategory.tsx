@@ -23,7 +23,7 @@ import { useRouter } from "next/navigation"
 
     async function deleteProduct(){
         try {
-            await api.delete(`/category`, {
+            await api.delete(`/api/category`, {
                 params: {
                     id: id
                 }
