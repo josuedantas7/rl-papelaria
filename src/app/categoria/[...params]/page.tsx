@@ -23,7 +23,7 @@ const CategoryId = async ({params} : { params : { params: string } }) => {
   return (
     <div>
       <h1 className='text-center my-8 text-2xl font-bold'>Produtos da categoria: <span className='font-normal'>{category?.name}</span></h1>
-      <div className='flex flex-wrap justify-center gap-8'>
+      <div className='flex flex-wrap justify-center gap-8 mb-12'>
         {products.length === 0 ? <h1 className='text-center w-full text-2xl font-bold'>Nenhum produto encontrado</h1> : (
           products.map((product) => (
             <CardProduct key={product.id} product={product} />

@@ -38,7 +38,7 @@ const Carrinho = () => {
                         </div>
                     )
                 ))}
-                    <p className='font-bold text-sm text-gray-600 mt-2'>Total: {formatNumber((cart ?? []).reduce((acc, product) => acc + product.price * (product.qtd ?? 0), 0))}</p>
+                    <p className='font-bold text-sm text-gray-600 mt-2'>Valor Total: {formatNumber((cart ?? []).reduce((acc, product) => acc + product.price * (product.qtd ?? 0), 0))}</p>
             </div>
                 ) : (
                 <p className='text-center text-2xl font-bold mt-12 text-gray-600'>Carrinho vazio</p>
