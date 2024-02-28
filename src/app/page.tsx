@@ -12,6 +12,15 @@ const Home = async () => {
 
   const session = await getServerSession(authOptions)
 
+  if (session) {
+    const userId = await prisma.user.findUnique({
+      where: {
+        id: session?.user.id
+      }
+    })
+    console.log(userId)
+  }
+
   const categories = await prisma.category.findMany()
 
   const products = await prisma.product.findMany({

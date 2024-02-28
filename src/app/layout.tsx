@@ -26,17 +26,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <CartProvider>
-          <main>
-            <PrimeReactProvider>
-              <AuthProvider>
-                <Notifier/>
-                <Header/>
-                {children}
-              </AuthProvider>
-            </PrimeReactProvider>
-          </main>
-        </CartProvider>
+        <AuthProvider>
+          <CartProvider>
+            <main>
+              <PrimeReactProvider>
+                  <Notifier/>
+                  <Header/>
+                  {children}
+              </PrimeReactProvider>
+            </main>
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
