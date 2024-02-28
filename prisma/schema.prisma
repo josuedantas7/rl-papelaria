@@ -40,32 +40,53 @@ model User {
   updatedAt      DateTime  @updatedAt
   accounts       Account[]
   role           String?   @default("user")
+  cart           Cart?
+}
+
+model Category {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  image     String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Product   Product[]
 }
 
 model Product {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  id          String        @id @default(auto()) @map("_id") @db.ObjectId
   name        String
   description String?
   price       Float
   image       String
   color       String?
-  qtd         Int?     @default(1)
-  status      Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  category    Category @relation(fields: [categoryId], references: [id])
-  categoryId  String   @db.ObjectId
-  star        Boolean  @default(false)
+  qtd         Int?          @default(1)
+  status      Boolean       @default(true)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  category    Category      @relation(fields: [categoryId], references: [id])
+  categoryId  String        @db.ObjectId
+  star        Boolean       @default(false)
+  CartProduct CartProduct[]
 }
 
-model Category {
+model Cart {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  ownerId      String        @unique @db.ObjectId
+  cartProducts CartProduct[]
+  owner        User          @relation(fields: [ownerId], references: [id])
+}
+
+model CartProduct {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  image     String
+  cartId    String   @db.ObjectId
+  productId String   @db.ObjectId
+  qtd       Int
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  Product Product[]
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }
 
 model VerificationToken {

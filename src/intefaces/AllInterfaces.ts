@@ -22,6 +22,14 @@ export interface ProductProps{
     star?: boolean | null;
 }
 
+export interface CartProps{
+    id?: string;
+    qtd: number;
+    cartId?: string;
+    productId?: string;
+    product: ProductProps;
+}
+
 export interface CategoryProps{
     id: string;
     name: string;
@@ -31,10 +39,10 @@ export interface CategoryProps{
 }
 
 export interface CartContextProps{
-    cart: ProductProps[]
+    cart: CartProps[]
     addCart: (product: ProductProps) => void
-    addQtdCart: (product: ProductProps) => void
-    removeQtdCart: (product: ProductProps) => void
+    addQtdCart: (product: CartProps) => void
+    removeQtdCart: (product: CartProps) => void
     qtdTotal: number
-    totalValue: number
+    setCart: (cart: CartProps[]) => void
 }
