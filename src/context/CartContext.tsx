@@ -3,6 +3,7 @@ import { createContext, useState, useEffect, ReactNode } from "react";
 import { ProductProps, CartContextProps, CartProps } from '@/intefaces/AllInterfaces'
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/api";
+import { useRouter } from "next/navigation";
 
 export const CartContext = createContext<CartContextProps>({ cart: [], addCart: () => {}, addQtdCart: () => {}, removeQtdCart: () => {}, qtdTotal: 0, setCart: () => {}});
 
@@ -12,9 +13,13 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
     const [qtdTotal, setQtdTotal] = useState<number>(0)
     const { data:session, status } = useSession()
 
+    const router = useRouter()
     const [cartExists, setCartExists] = useState<boolean>(false)
 
     function addCart(product: ProductProps) {
+        if (status !== 'authenticated') {
+            return router.push('/login')
+        }
         if (cartExists) {
             const productExistsInCart = cart.find((item) => item.product.id === product.id)
             if (productExistsInCart) {
