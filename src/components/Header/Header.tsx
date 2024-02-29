@@ -63,7 +63,7 @@ function Header() {
         <Toolbar className='relative' disableGutters>
           {
             status === 'authenticated' && (
-              <div onClick={() => router.push('/carrinho')} className='absolute cursor-pointer w-[200px] mx-auto flex justify-center items-center left-0 right-0'>
+              <div className='absolute cursor-pointer w-[200px] mx-auto flex justify-center items-center left-0 right-0'>
                 {qtdTotal > 0 && (
                   <p className='absolute cursor-pointer bg-white rounded-full text-black w-[25px] h-[25px] mx-auto flex justify-center right-0 left-0 -translate-y-3 translate-x-4'>{qtdTotal}</p>
                 )}
