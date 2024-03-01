@@ -25,25 +25,32 @@ export default function BasicDemo() {
             label: 'Gerenciar Loja',
             items: [
                 {
-                    label: 'Cadastrar Produtos',
+                    label: 'Gerenciar Produtos',
                     icon: 'pi pi-fw pi-file',
                     command: () => {
                         router.push('/cadastrar-produto')
                     }
                 },
                 {
-                    label: 'Cadastrar Categorias',
+                    label: 'Gerenciar Categorias',
                     icon: 'pi pi-fw pi-tags',
                     command: () => {
                         router.push('/cadastrar-categoria')
                     }
                 },
                 {
-                    label: 'Cadastrar Admin',
+                    label: 'Gerenciar Admin',
                     icon: 'pi pi-fw pi-user',
                     command: () => {
                         router.push('/cadastrar-admin')
                     
+                    }
+                },
+                {
+                    label: 'Gerenciar Carrinhos',
+                    icon: 'pi pi-fw pi-shopping-cart',
+                    command: () => {
+                        router.push('/gerenciar-carrinho')
                     }
                 }
             ]

@@ -83,12 +83,11 @@ const InfoUser = () => {
       };
 
   return (
-    <div className='ml-auto mt-12 w-[80%] max-[820px]:w-[70%] max-[420px]:w-full'>
+    <div className='ml-auto mt-20 w-[80%] max-[820px]:w-[70%] max-[420px]:w-full'>
         {status === 'loading' ? (
             <h1 className='text-center font-bold text-2xl'>Carregando informações...</h1>
         ): (
             <div className='max-[420px]:px-2'>
-                <h1 className='text-3xl hidden min-[420px]:flex font-bold text-center mb-10'>Painel Admin</h1>
                 <div className='w-[80%] max-[420px]:w-full mx-auto bg-gray-300 relative rounded-xl pt-12 h-[400px] py-5 shadow-2xl border border-zinc-200'>
                     <Image className='mx-auto rounded-full absolute p-1 border-2 border-black -top-10 left-0 right-0 w-[80px] h-[80px]' width={80} height={80} alt='Foto de perfil' src={session?.user?.image || ''} />
                     {buttonEdit ? (
