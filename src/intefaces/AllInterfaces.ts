@@ -1,4 +1,5 @@
 export interface UserProps{
+    id?: string;
     name?: string;
     email: string;
     password: string;
@@ -23,11 +24,13 @@ export interface ProductProps{
 }
 
 export interface CartProps{
+    owner?: UserProps;
     id?: string;
     qtd: number;
     cartId?: string;
     productId?: string;
     product: ProductProps;
+    cartProducts?: CartProps[];
 }
 
 export interface CategoryProps{
