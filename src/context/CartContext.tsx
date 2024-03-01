@@ -145,13 +145,12 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
         if (status === 'authenticated') {
             const getCartByUser = async () => {
                 const response = await api.get('/api/cart')
-                console.log(response.data)
-                if (response.data.cart) {
+                if (response.data.length > 0) {
                     setCartExists(true)
-                    const carrinho = response.data.cart.cartProducts
-                    console.log(carrinho)
-                    setCart(carrinho)
                 }
+                const carrinho = response.data.cart.cartProducts
+                console.log(carrinho)
+                setCart(carrinho)
             }
             getCartByUser()
         }
