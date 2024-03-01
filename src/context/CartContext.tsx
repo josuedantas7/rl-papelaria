@@ -23,10 +23,12 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
         if (cartExists) {
             const productExistsInCart = cart.find((item) => item.product.id === product.id)
             if (productExistsInCart) {
-                setCart([...cart, {
-                    qtd: productExistsInCart.qtd + 1,
-                    product: product as {} as ProductProps,
-                }])
+                setCart(cart.map((item) => {
+                    if(item.product.id === product.id) {
+                        item.qtd += 1
+                    }
+                    return item
+                }))
             } else {
                 setCart([...cart, {
                     qtd: 1,
@@ -54,7 +56,6 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
     function addQtdCart(product: CartProps) {
         if (cartExists) {
             const productExistsInCart = cart.find((item) => item.product.id === product.product.id)
-            console.log('ITEM REPERTIDO')
             if (productExistsInCart) {
                 setCart(cart.map((item) => {
                     if(item.product.id === product.product.id) {
@@ -88,46 +89,21 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
     }
 
     function removeQtdCart(product: CartProps) {
-        if (cartExists) {
-            const productExistsInCart = cart.find((item) => item.product.id === product.product.id)
-            if (productExistsInCart) {
+        const productExistsInCart = cart.find((item) => item.product.id === product.product.id)
+        if (productExistsInCart) {
+            if (product.qtd === 1) {
+                setCart(cart.filter((item) => item.product.id !== product.product.id))
+            } else {
                 setCart(cart.map((item) => {
                     if(item.product.id === product.product.id) {
                         item.qtd -= 1
-                        if (item.qtd === 0) {
-                            setCart(cart.filter((item) => item.product.id !== product.product.id))
-                            
-                        }
                     }
                     return item
                 }))
-            } else {
-                setCart([...cart, {
-                    qtd: 1,
-                    product: product.product,
-                }])
-            }
-        } else {
-            const productExistsInCart = cart.find((item) => item.product.id === product.product.id)
-            if (productExistsInCart) {
-                const updatedCart = cart.map((item) => {
-                    if (item.product.id === product.product.id) {
-                        if (item.qtd === 1) {
-                            console.log('filter sem cart salvo');
-                            return null;
-                        }
-                        return { ...item, qtd: item.qtd - 1 };
-                    }
-                    return item;
-                }).filter(Boolean);
-            
-                setCart(updatedCart as CartProps[]);
-            } else {
-                // Adiciona um novo item ao carrinho
-                setCart([...cart, { qtd: 1, product: product.product }]);
             }
         }
     }
+
 
     useEffect(() => {
         function totalCart() {
@@ -145,12 +121,13 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
         if (status === 'authenticated') {
             const getCartByUser = async () => {
                 const response = await api.get('/api/cart')
-                if (response.data.length > 0) {
+                console.log(response)
+                if (response.data.cart && response.data.cart.cartProducts.length > 0) {
                     setCartExists(true)
+                    const carrinho = response.data.cart.cartProducts
+                    setCart(carrinho)
+                    console.log(carrinho)
                 }
-                const carrinho = response.data.cart.cartProducts
-                console.log(carrinho)
-                setCart(carrinho)
             }
             getCartByUser()
         }
