@@ -4,6 +4,7 @@ import { ProductProps, CartContextProps, CartProps } from '@/intefaces/AllInterf
 import { useSession } from "next-auth/react";
 import { api } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import Notification from "@/components/Notifier/Notification";
 
 export const CartContext = createContext<CartContextProps>({ cart: [], addCart: () => {}, addQtdCart: () => {}, removeQtdCart: () => {}, qtdTotal: 0, setCart: () => {}});
 
@@ -18,6 +19,7 @@ export const CartProvider = ({ children } : { children : ReactNode }) => {
 
     function addCart(product: ProductProps) {
         if (status !== 'authenticated') {
+            Notification('warning', 'Faça o login para adicionar produtos ao carrinho')
             return router.push('/login')
         }
         if (cartExists) {
